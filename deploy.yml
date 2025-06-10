@@ -1,0 +1,13 @@
+- name: Deploy Maven Application
+  hosts: web
+  tasks:
+    - name: Copy JAR file to remote server
+      copy:
+	src: /var/lib/jenkins/workspace/Maven-CI-Pipeline/target/myapp.jar
+        dest: /opt/myapp.jar
+        mode: '0755'
+
+    - name: Restart Application Service
+      shell: |
+	pkill -f myapp.jar || true
+        nohup java -jar /opt/myapp.jar > /dev/null 2>&1 &
